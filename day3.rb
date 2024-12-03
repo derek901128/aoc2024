@@ -1,36 +1,31 @@
+def mul(instruction)
+    instruction
+        .scan(/\d+/)
+        .map(&:to_i)
+        .reduce{|a, b| a * b}  
+end
+
 #part1
 
-p File
-    .readlines("input.txt")
-    .map{|line| 
-        line
-        .scan(/mul\(\d+\,\d+\)/)
-        .map{|i|
-             i
-             .scan(/\d+/)
-             .map(&:to_i)
-             .reduce{|a, b| a * b} }
-             .sum 
-    }
+file = File.read("day3_input.txt")
+
+p file
+    .scan(/mul\(\d+\,\d+\)/)
+    .map{|i| mul i }
     .sum
 
 # # part2 
 
-
-gate = true
-sum = 0
-
-File.foreach("input.txt") do |line|
-    line.scan(/mul\(\d+\,\d+\)|don\'t\(\)|do\(\)/) do |i|
-        case i
-        when "do()"
-            gate = true
+p file
+    .scan(/mul\(\d+\,\d+\)|don\'t\(\)|do\(\)/)
+    .slice_before(/d.+/)
+    .map{|grp|
+        case grp.first
+        when "do()" 
+            grp.grep(/m.*/).map{|i| mul i }.sum
         when "don't()"
-            gate = false
+            0
         else
-            sum += i.scan(/\d+/).map(&:to_i).reduce { |a, b| a * b } if gate
+            grp.map{|i| mul i }.sum
         end
-    end
-end
-
-p sum
+    }.sum
