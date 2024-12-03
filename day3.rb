@@ -28,4 +28,5 @@ p file
         else
             grp.map{|i| mul i }.sum
         end
-    }.sum
+    }
+    .sum
